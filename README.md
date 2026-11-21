@@ -1,24 +1,47 @@
 # 📖 Buku Tamu Digital
 
-Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pelayanan publik. Tamu cukup memindai QR atau memakai tablet kiosk, menulis keperluan dengan kalimat biasa, lalu sistem mengarahkan ke unit/pegawai yang tepat dan memberi tahu pegawai tersebut secara otomatis.
+Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pelayanan publik. Tamu memindai **QR di meja resepsionis** atau memakai tablet kiosk, menulis keperluan dengan kalimat biasa, lalu AI menentukan unit tujuan. Sistem menugaskan **satu pegawai**, mengirim notifikasi, dan mengarahkan tamu ke **ruang tamu unit tujuan**. Rating hanya diberikan untuk kunjungan yang sudah **selesai**.
 
 > Dikembangkan oleh satu kelompok yang terdiri dari 6 orang.
 
 **Cocok untuk:** BPS, Perpustakaan Bung Karno, Dinas Pendidikan, Kantor Kecamatan, dan instansi sejenis.
 
+**Dokumen terkait:** [Desain Sistem Buku Tamu Digital](Desain%20Sistem%20Buku%20Tamu%20Digital.md) — ERD, UML, wireframe, aturan bisnis, dan kontrak AI.
+
+---
+
+## 📌 Status Implementasi
+
+| Bagian | Status | Catatan |
+|---|---|---|
+| Dokumentasi & desain | ✅ | README + dokumen desain |
+| Skeleton Laravel 13 | ✅ | Baru model `User` dan migrasi dasar |
+| Database Neon | 🚧 | Isi `DB_URL` di `.env`, lalu jalankan migrasi |
+| Model & migrasi domain | 🚧 | `units`, `pegawai`, `tamu`, `kunjungan`, dll. belum dibuat |
+| UI React + Inertia | 🚧 | Belum dipasang |
+| Auth & manajemen peran | 🚧 | — |
+| AI Kilo Gateway | 🚧 | Perlu daftar model gratis |
+| Queue & notifikasi | 🚧 | Tabel `jobs` sudah ada |
+| Testing | 🚧 | PHPUnit tersedia; test domain belum |
+| Deployment | 🚧 | — |
+
+> ✅ = sudah ada · 🚧 = rencana/sedang dikerjakan. README ini tidak mengklaim fitur yang belum terpasang.
+
 ---
 
 ## 📑 Daftar Isi
 
+- [Status Implementasi](#-status-implementasi)
 - [Latar Belakang](#-latar-belakang)
 - [Fitur](#-fitur)
 - [Peran Pengguna](#-peran-pengguna)
 - [Alur Pemakaian](#-alur-pemakaian)
+- [Keputusan Desain](#-keputusan-desain)
 - [Peran AI](#-peran-ai)
 - [Tech Stack](#-tech-stack)
 - [Arsitektur](#-arsitektur)
 - [Struktur Database](#-struktur-database)
-- [Koneksi Database (Supabase / Neon)](#-koneksi-database-supabase--neon)
+- [Koneksi Database (Neon)](#-koneksi-database-neon)
 - [Struktur Folder](#-struktur-folder)
 - [Instalasi](#-instalasi)
 - [Konfigurasi Environment](#-konfigurasi-environment)
@@ -39,25 +62,29 @@ Buku tamu kertas punya beberapa masalah yang berulang:
 | Petugas tidak tahu tamu ingin bertemu siapa | Tamu menunggu lama atau salah ruangan |
 | Rekap kunjungan dihitung manual | Memakan waktu dan rawan salah hitung |
 
-**Buku Tamu Digital** menggantikan buku kertas dengan form cepat, klasifikasi keperluan otomatis oleh AI, notifikasi ke pegawai tujuan, dan rekap otomatis untuk pimpinan.
+**Buku Tamu Digital** menggantikan buku kertas dengan form cepat, klasifikasi keperluan otomatis oleh AI, penugasan pegawai, notifikasi, dan rekap otomatis untuk pimpinan.
 
 ---
 
 ## ✨ Fitur
 
 ### Fitur Inti
-- **Form tamu cepat**: tamu yang pernah datang cukup mengisi nomor HP.
-- **Data master**: unit, pegawai, dan jam layanan.
-- **Status kunjungan**: `menunggu` → `dilayani` → `selesai`.
+
+- **Form tamu cepat**: tamu yang pernah datang cukup mengisi nomor HP; identitas terisi otomatis.
+- **QR di meja resepsionis**: tamu membuka form dari ponsel atau kiosk. QR tidak dipakai untuk rating.
+- **Data master**: unit, pegawai, jam layanan, dan FAQ.
+- **Penugasan otomatis**: setelah AI menentukan unit, sistem memilih satu pegawai yang paling sedikit beban aktifnya.
+- **Notifikasi ke pegawai**: WhatsApp/email ke pegawai yang ditugaskan.
+- **Status kunjungan**: `menunggu` → `dilayani` → `selesai`, plus `tidak_terlayani`.
 - **Rekap harian/bulanan** dengan ekspor dan cetak.
-- **Tanda tangan digital** langsung di layar.
-- **Rating singkat** sebelum tamu pulang.
+- **Rating singkat** di kiosk, hanya untuk kunjungan `selesai`, dicari lewat nomor HP.
 
 ### Interaktif & Mudah Dipakai
+
 - Mode **kiosk layar penuh** dengan tombol besar.
-- **QR per meja/lokasi** (tamu bisa mengisi dari ponsel sendiri).
-- **Notifikasi ke pegawai** via WhatsApp/email.
-- Layar **ucapan selamat datang** dan **arahan setelah submit** (contoh: "Silakan ke ruang …").
+- Layar **status** yang diperbarui otomatis selama AI memproses keperluan.
+- Layar **ucapan selamat datang** dan **arahan setelah submit** (contoh: “Silakan ke ruang …”).
+- **Asisten tanya-jawab** untuk jam layanan, lokasi, dan syarat layanan.
 
 ---
 
@@ -65,68 +92,109 @@ Buku tamu kertas punya beberapa masalah yang berulang:
 
 | Peran | Akses | Login |
 |---|---|---|
-| **Tamu** | Mengisi form, melihat arahan, bertanya ke asisten FAQ, memberi rating | ❌ Tidak perlu |
-| **Resepsionis / Admin** | Kelola data master & FAQ, koreksi hasil klasifikasi AI, pantau antrean kunjungan | ✅ |
-| **Pegawai** | Menerima notifikasi, menandai tamu sudah dilayani | ✅ |
-| **Pimpinan** | Melihat rekap dan ringkasan mingguan | ✅ |
+| **Tamu** | Mengisi form, melihat status/arahan, bertanya ke asisten FAQ, memberi rating kunjungan selesai | ❌ Tidak perlu |
+| **Resepsionis** | Memantau antrean, mengoreksi hasil AI, mengganti pegawai, menandai tidak terlayani, mengelola data master & FAQ | ✅ |
+| **Admin** | Semua akses resepsionis + mengelola pengguna dan peran | ✅ |
+| **Pegawai** | Menerima notifikasi, melihat tugas, menandai tamu dilayani/selesai | ✅ |
+| **Pimpinan** | Melihat rekap dan ringkasan mingguan (read-only) | ✅ |
 
 ---
 
 ## 🔄 Alur Pemakaian
 
-1. Tamu memindai **QR di meja depan** atau memakai **tablet mode kiosk**.
-2. Tamu mengisi **nama, instansi**, dan menulis **keperluan** dengan kalimat biasa.
-3. **AI membaca keperluan**, menentukan unit/pegawai tujuan, lalu menampilkan arahan *"Silakan ke ruang …"*.
-4. **Pegawai tujuan** menerima notifikasi dan menandai tamu sudah dilayani.
-5. Tamu memberi **rating singkat** sebelum pulang.
+1. Tamu memindai **QR di meja resepsionis** atau memakai **tablet kiosk**.
+2. Tamu mengisi **nomor HP**. Jika sudah pernah datang, identitas terisi otomatis; **keperluan selalu diisi baru**.
+3. Setelah submit, kunjungan disimpan dengan status `menunggu`. AI memproses keperluan lewat **queue**, dan halaman status diperbarui otomatis.
+4. AI menentukan unit. Sistem memilih **satu pegawai** di unit tersebut, mengirim notifikasi, lalu menampilkan arahan ke **ruang tamu unit** dan nama pegawai. Pegawai menemui tamu di ruang tamu.
+5. Jika tidak ada pegawai atau pegawai tidak bisa melayani, resepsionis mengganti pegawai atau menandai kunjungan **tidak terlayani**. Tamu diarahkan pulang.
+6. Pegawai menandai tamu **dilayani**, lalu **selesai**.
+7. Tamu memberi **rating di kiosk** dengan memasukkan nomor HP. Hanya kunjungan `selesai` yang bisa dinilai.
 
 ```mermaid
 flowchart LR
-    A[Scan QR / Kiosk] --> B[Isi nama, instansi, keperluan]
-    B --> C[AI klasifikasi keperluan]
-    C --> D[Arahan: Silakan ke ruang ...]
-    C --> E[Notifikasi ke pegawai]
-    E --> F[Pegawai tandai: dilayani]
-    F --> G[Tamu beri rating]
-    G --> H[Selesai]
+    A[Scan QR meja resepsionis / kiosk] --> B[Cek nomor HP]
+    B --> C{Tamu lama?}
+    C -- Ya --> D[Identitas terisi otomatis]
+    C -- Tidak --> E[Isi identitas]
+    D --> F[Tulis keperluan]
+    E --> F
+    F --> G[Simpan kunjungan: menunggu]
+    G --> H[Queue: AI klasifikasi]
+    H --> I[AI tentukan unit]
+    I --> J[Pilih pegawai & kirim notifikasi]
+    J --> K[Tampilkan arahan ruang tamu unit]
+    K --> L[Pegawai tandai dilayani]
+    L --> M[Pegawai tandai selesai]
+    M --> N[Tamu rating via nomor HP]
+    N --> O[Selesai]
+    I -.->|gagal / tidak yakin| P[Perlu ditinjau resepsionis]
+    P --> J
+    J -.->|tidak ada pegawai| Q[Tandai tidak terlayani]
+    Q --> O
 ```
+
+---
+
+## 🧭 Keputusan Desain
+
+| No | Keputusan | Alasan |
+|---|---|---|
+| 1 | QR hanya ada di **meja resepsionis**, bukan per meja/lokasi. | Tidak perlu tabel `lokasi_qr`; QR hanya membuka form. |
+| 2 | Rating dicari lewat **nomor HP**, tetapi unik per **kunjungan**. | Nomor HP mengenali tamu; satu kunjungan tetap hanya punya satu rating, dan tamu yang datang lagi bisa menilai kunjungan berikutnya. |
+| 3 | Tanda tangan digital **tidak dipakai di MVP**. | Tidak ada kebutuhan mendesak; bisa ditambahkan nanti sebagai opsional. |
+| 4 | Notifikasi ke **satu pegawai** yang ditugaskan. | Tamu tidak perlu menunggu semua pegawai; resepsionis bisa mengganti pegawai. |
+| 5 | Jika tetap tidak ada pegawai yang bisa melayani, kunjungan **tidak_terlayani** dan tamu pulang. | Resepsionis/admin mencoba mengganti pegawai terlebih dahulu; keputusan akhir tetap di mereka, bukan otomatis oleh sistem. |
+| 6 | Tamu lama boleh memperbarui identitas; **keperluan per kunjungan**. | Tamu yang sama bisa datang dengan keperluan berbeda. |
+| 7 | Endpoint memakai **Inertia**, tanpa REST API terpisah. | Halaman React dirender dari controller Laravel. |
+| 8 | AI memakai **Kilo Gateway** dengan model gratis + fallback. | Model gratis bisa lambat/rate-limited; fallback menjaga layanan tetap jalan. |
+| 9 | AI dan notifikasi lewat **queue**; halaman status polling. | Submit tamu tetap cepat dan tidak menunggu model AI. |
+| 10 | Status kunjungan ada empat: `menunggu`, `dilayani`, `selesai`, `tidak_terlayani`. | Membedakan kunjungan yang benar-benar selesai dari yang gagal dilayani. |
+| 11 | Ringkasan mingguan **tidak disimpan di tabel**. | Dihitung saat halaman pimpinan dibuka dan di-cache sebentar; tidak perlu tabel laporan. |
+| 12 | Tamu diarahkan ke **ruang tamu unit tujuan**; pegawai menemui tamu di sana. | Memakai `units.lokasi_ruang`; tidak perlu tabel ruang baru. |
+
+Detail aturan, ERD, dan UML ada di [dokumen desain](Desain%20Sistem%20Buku%20Tamu%20Digital.md).
 
 ---
 
 ## 🤖 Peran AI
 
-| Fitur AI | Input | Output |
-|---|---|---|
-| **Klasifikasi keperluan** | Teks keperluan tamu | Unit tujuan, kategori keperluan, ringkasan satu kalimat. Hasil dapat diubah resepsionis. |
-| **Asisten tanya-jawab** | Pertanyaan tamu (jam layanan, letak ruang, syarat layanan) | Jawaban **hanya dari data FAQ** yang diisi admin. |
-| **Ringkasan mingguan** | Data kunjungan satu minggu | Ringkasan keperluan paling sering muncul untuk pimpinan. |
+| Fitur AI | Input | Output | Catatan |
+|---|---|---|---|
+| **Klasifikasi keperluan** | Teks keperluan tamu | `unit_kode`, kategori, ringkasan satu kalimat, confidence | Lewat queue; hasil bisa dikoreksi resepsionis |
+| **Asisten tanya-jawab** | Pertanyaan tamu | Jawaban dari FAQ aktif | Hanya dari data FAQ; jika tidak ada, sarankan petugas |
+| **Ringkasan mingguan** | Data kunjungan satu minggu | Narasi untuk pimpinan | Dihitung saat halaman dibuka, di-cache; tidak disimpan di tabel |
 
 **Prinsip penggunaan AI:**
+
 - Hasil klasifikasi selalu bisa dikoreksi manual oleh resepsionis.
-- Output AI berupa JSON terstruktur dan divalidasi. Jika gagal atau tidak yakin, kunjungan ditandai **"perlu ditinjau resepsionis"**.
-- Asisten tanya-jawab dibatasi pada data FAQ. Jika jawaban tidak ada, asisten menyarankan bertanya ke petugas.
-- Hanya teks keperluan yang dikirim ke layanan AI, tanpa data identitas yang tidak diperlukan.
+- Output AI berupa JSON terstruktur dan divalidasi. Jika gagal, unit tidak dikenal, atau confidence di bawah `0.70`, kunjungan ditandai **perlu ditinjau**.
+- Hanya teks keperluan yang dikirim ke layanan AI, tanpa nama, nomor HP, atau alamat tamu.
 - Panggilan AI dijalankan lewat **queue** agar submit tamu tetap cepat.
+- Model gratis dari **Kilo Gateway** dicoba berurutan: model utama, lalu daftar fallback. Jika semua gagal, job di-retry; setelah batas retry, kunjungan masuk daftar perlu ditinjau.
+- Asisten FAQ dibatasi pada FAQ aktif. Jika jawaban tidak ada, asisten menyarankan bertanya ke petugas.
+
+Kontrak output, fallback, dan aturan validasi lengkap ada di [dokumen desain §5](Desain%20Sistem%20Buku%20Tamu%20Digital.md#5-kontrak-ai).
 
 ---
 
 ## 🛠 Tech Stack
 
-| Lapisan | Teknologi | Keterangan |
+| Lapisan | Teknologi | Status |
 |---|---|---|
-| Backend | [Laravel](https://laravel.com) 13 (PHP ≥ 8.3) | Framework utama, auth, queue, scheduler |
-| Jembatan FE-BE | [Inertia.js](https://inertiajs.com) v3 | Halaman React dirender dari controller Laravel, tanpa REST API terpisah |
-| Frontend | [React](https://react.dev) 19 + TypeScript | UI tamu, kiosk, dan dashboard |
-| Build tool | [Vite](https://vite.dev) | Bundler bawaan ekosistem Laravel |
-| Styling & UI | [Tailwind CSS](https://tailwindcss.com) v4 + [shadcn/ui](https://ui.shadcn.com) | Komponen besar dan ramah kiosk |
-| **Database** | **PostgreSQL via [Supabase](https://supabase.com) atau [Neon](https://neon.com)** | Managed PostgreSQL (pilih salah satu, lihat [panduan koneksi](#-koneksi-database-supabase--neon)) |
-| Auth & peran | Auth bawaan Laravel + kolom `role` | Bukan Supabase Auth. Pengguna disimpan di tabel `users` Laravel |
-| Antrean & jadwal | Laravel Queue (driver `database`) + Scheduler | Notifikasi, panggilan AI, ringkasan mingguan |
-| Integrasi AI | Laravel AI SDK atau HTTP client ke provider LLM | Klasifikasi, FAQ, ringkasan |
-| Notifikasi | Laravel Mail + WhatsApp gateway | Fonnte untuk MVP, WhatsApp Cloud API untuk produksi |
-| Testing | Pest | Backend |
+| Backend | [Laravel](https://laravel.com) 13 (PHP ≥ 8.3) | ✅ terpasang |
+| Jembatan FE-BE | [Inertia.js](https://inertiajs.com) v3 | 🚧 rencana |
+| Frontend | [React](https://react.dev) 19 + TypeScript | 🚧 rencana |
+| Build tool | [Vite](https://vite.dev) 8 | ✅ terpasang |
+| Styling & UI | [Tailwind CSS](https://tailwindcss.com) v4 + [shadcn/ui](https://ui.shadcn.com) | Tailwind ✅, shadcn 🚧 |
+| Database | PostgreSQL via [Neon](https://neon.com) | 🚧 konfigurasi |
+| Auth & peran | Auth bawaan Laravel + kolom `role` | 🚧 rencana |
+| Antrean | Laravel Queue (`database`) | ✅ tabel queue tersedia |
+| Integrasi AI | **Kilo Gateway** (endpoint kompatibel OpenAI) + model gratis | 🚧 rencana |
+| Notifikasi | Laravel Mail + WhatsApp gateway (Fonnte MVP, Cloud API produksi) | 🚧 rencana |
+| Testing | PHPUnit | ✅ tersedia |
+| Tanda tangan digital | — | ❌ tidak dipakai di MVP |
 
-**Library pendukung (usulan, sesuaikan dengan implementasi):** `signature_pad` (tanda tangan digital), library QR code PHP, Recharts (grafik rekap), Laravel Excel dan DomPDF (ekspor).
+**Library pendukung (usulan):** pembuat QR statis untuk meja resepsionis, Recharts (grafik rekap), Laravel Excel dan DomPDF (ekspor).
 
 > **Catatan versi (per 21 November 2026):** Laravel 13 dirilis 17 Maret 2026 dan membutuhkan PHP 8.3 atau lebih baru. Periksa kembali versi saat memulai proyek.
 
@@ -136,87 +204,75 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    T[Tamu: QR / Kiosk] --> R[React + Inertia]
-    P[Pegawai / Resepsionis / Pimpinan] --> R
+    T[Tamu: QR meja resepsionis / kiosk] --> R[React + Inertia]
+    P[Pegawai / Resepsionis / Admin / Pimpinan] --> R
     R --> L[Laravel 13]
-    L --> DB[(PostgreSQL: Supabase / Neon)]
-    L --> Q[Queue]
-    Q --> AI[AI Provider]
+    L --> DB[(PostgreSQL: Neon)]
+    L --> Q[Queue database]
+    Q --> AI[Kilo Gateway]
     Q --> WA[WhatsApp / Email]
-    S[Scheduler] --> Q
+    Q --> DB
 ```
 
-Setelah tamu submit, Laravel menyimpan kunjungan lalu mengirim job ke queue: satu job memanggil AI untuk klasifikasi, job berikutnya mengirim notifikasi ke pegawai tujuan. Scheduler menjalankan ringkasan mingguan.
+Setelah tamu submit, Laravel menyimpan kunjungan lalu mengirim job ke queue:
+
+1. **KlasifikasiKunjungan** memanggil AI, memvalidasi hasil, mengisi unit/kategori/ringkasan, memilih pegawai, lalu mengirim notifikasi.
+2. **KirimNotifikasiKunjungan** mengirim WhatsApp/email ke pegawai yang ditugaskan.
+
+Ringkasan mingguan tidak memakai job/scheduler; halaman pimpinan menghitungnya saat dibuka dan menyimpan hasil sementara di cache. Halaman status kunjungan melakukan polling Inertia sampai `klasifikasi_status` tidak lagi `diproses`. Tidak ada REST API terpisah; semua halaman memakai Inertia.
 
 ---
 
 ## 🗄 Struktur Database
 
-Tabel utama: `users`, `units`, `pegawai`, `tamu`, `kunjungan`, `faq`, `rating`.
+**8 tabel.** ERD lengkap ada di [dokumen desain §1](Desain%20Sistem%20Buku%20Tamu%20Digital.md#1-erd).
 
-```mermaid
-erDiagram
-    UNITS ||--o{ PEGAWAI : memiliki
-    UNITS ||--o{ KUNJUNGAN : tujuan
-    UNITS ||--o{ FAQ : "info unit"
-    USERS ||--o| PEGAWAI : "akun"
-    TAMU ||--o{ KUNJUNGAN : melakukan
-    PEGAWAI ||--o{ KUNJUNGAN : melayani
-    KUNJUNGAN ||--o| RATING : dinilai
-```
-
-| Tabel | Kolom utama (usulan) |
+| Tabel | Isi |
 |---|---|
-| `users` | id, name, email, password, role (`admin`, `resepsionis`, `pegawai`, `pimpinan`) |
-| `units` | id, nama, ruang, jam_layanan (`jsonb`), deskripsi |
-| `pegawai` | id, user_id, unit_id, nama, jabatan, no_wa, email |
-| `tamu` | id, nama, instansi, no_hp (unik, disimpan dalam format ternormalisasi, mis. `62812...`) |
-| `kunjungan` | id, tamu_id, unit_id, pegawai_id, keperluan, kategori, ringkasan_ai, status, lokasi_qr, tanda_tangan, waktu_datang, waktu_dilayani, waktu_selesai (`timestamptz`) |
+| `users` | id, name, email, password, role (`admin`, `resepsionis`, `pegawai`, `pimpinan`), aktif |
+| `units` | id, kode, nama, lokasi_ruang, deskripsi, aktif |
+| `jam_layanan` | id, unit_id, hari, jam_mulai, jam_selesai, aktif |
+| `pegawai` | id, user_id (nullable), unit_id, nama, jabatan, no_wa, email, aktif, bisa_menerima_tamu, terakhir_ditugaskan_pada |
+| `tamu` | id, nama, kategori (`perorangan`/`instansi`), instansi, alamat, no_hp (unik, ternormalisasi) |
+| `kunjungan` | id, kode_publik (unik), tamu_id, unit_id (nullable), pegawai_id (nullable), keperluan, kategori, ringkasan_ai, status, klasifikasi_status, diubah_oleh, alasan_tidak_terlayani, catatan, waktu_datang, waktu_dilayani, waktu_selesai, notifikasi_terkirim_pada |
 | `faq` | id, unit_id (opsional), pertanyaan, jawaban, aktif |
-| `rating` | id, kunjungan_id, nilai (1-5), komentar |
+| `rating` | id, kunjungan_id (unik), nilai (1–5), komentar |
 
 **Catatan desain:**
-- Tamu dikenali **hanya dari nomor HP**, sehingga tamu lama cukup mengisi nomor HP dan data lainnya terisi otomatis.
-- Normalisasi format nomor HP (08xx / +62xx / 62xx) sebelum disimpan agar tamu yang sama tidak terduplikasi.
+
+- **Tidak ada tanda tangan digital** di MVP.
+- Tamu dikenali **hanya dari nomor HP**, sehingga tamu lama cukup mengisi nomor HP dan identitas terisi otomatis.
+- Normalisasi format nomor HP (`08xx` / `+62xx` / `62xx` → `62xx`) sebelum disimpan agar tamu yang sama tidak terduplikasi.
+- **Rating hanya untuk kunjungan `selesai`**; `rating.kunjungan_id` diberi unique constraint.
+- `kunjungan.unit_id` dan `pegawai_id` nullable karena AI dan penugasan berjalan lewat queue.
+- Status kunjungan: `menunggu`, `dilayani`, `selesai`, `tidak_terlayani`.
+- `klasifikasi_status`: `diproses`, `otomatis`, `manual`, `perlu_ditinjau`.
+- `units.lokasi_ruang` dipakai sebagai **ruang tamu unit**; pegawai yang ditugaskan menemui tamu di sana.
+- Ringkasan mingguan **tidak disimpan di tabel**; dihitung saat halaman pimpinan dibuka dan di-cache.
 - Gunakan `timestamptz` untuk waktu dan atur `APP_TIMEZONE=Asia/Jakarta`.
 
 ---
 
-## 🐘 Koneksi Database (Supabase / Neon)
+## 🐘 Koneksi Database (Neon)
 
-Supabase dan Neon sama-sama PostgreSQL, jadi Laravel memakai driver `pgsql` bawaan. **Pilih salah satu.**
+Proyek ini memakai **Neon** sebagai PostgreSQL managed. Laravel memakai driver `pgsql` bawaan.
 
-> Proyek ini hanya memakai **database** dari Supabase/Neon. Autentikasi tetap memakai sistem auth Laravel, bukan Supabase Auth.
+> Autentikasi tetap memakai sistem auth Laravel, bukan layanan auth Neon.
 
 ### Prasyarat
+
 - Ekstensi PHP `pdo_pgsql` aktif.
-- Akun dan project di [Supabase](https://supabase.com) atau [Neon](https://neon.com).
+- Akun dan project di [Neon](https://neon.com).
 
-### Opsi A: Supabase
+### Langkah
 
-1. Buat project di Supabase, simpan password database.
-2. Buka **Connect** di dashboard, salin connection string **Session pooler** (port `5432`). Jika jaringan mendukung IPv6 atau memakai IPv4 Add-On, boleh memakai direct connection.
-3. **Jangan** memakai Transaction pooler (port `6543`) sebagai koneksi utama aplikasi, karena tidak mendukung prepared statement di sisi server yang dipakai ORM.
-4. Percent-encode karakter khusus pada password (`&`, `#`, `?`, spasi).
-5. Gunakan **schema khusus** (bukan `public`), karena Supabase mengekspos schema `public` sebagai Data API. Buat schema `laravel` lewat Table Editor atau SQL Editor:
-
-   ```sql
-   CREATE SCHEMA IF NOT EXISTS laravel;
-   ```
-
-```env
-DB_CONNECTION=pgsql
-DB_URL=postgres://postgres.[PROJECT-REF]:[PASSWORD]@[POOLER-HOST]:5432/postgres
-DB_SCHEMA=laravel
-DB_SSLMODE=require
-```
-
-### Opsi B: Neon
-
-1. Buat project di Neon, klik **Connect** pada dashboard untuk menyalin connection string.
-2. Neon menyediakan dua jenis string: **pooled** (hostname mengandung `-pooler`) dan **direct** (tanpa `-pooler`).
-3. Untuk proyek ini, **mulailah dengan direct connection**. Trafiknya kecil, queue worker berjalan lama, dan migrasi lebih stabil lewat koneksi langsung.
-4. Jika nanti memakai pooled connection (mis. deploy serverless), gunakan koneksi direct khusus untuk `php artisan migrate`.
+1. Buat project di Neon, lalu klik **Connect** pada dashboard untuk menyalin connection string.
+2. Neon menyediakan dua jenis string:
+   - **Direct** — hostname tanpa `-pooler`.
+   - **Pooled** — hostname mengandung `-pooler`.
+3. Untuk proyek ini, **gunakan direct connection** sebagai koneksi utama. Trafiknya kecil, queue worker berjalan lama, dan migrasi lebih stabil lewat koneksi langsung.
+4. Jika nanti memakai pooled connection (misalnya deploy serverless), gunakan koneksi direct khusus untuk `php artisan migrate` dan `php artisan queue:work`.
+5. Salin connection string ke `.env`:
 
 ```env
 DB_CONNECTION=pgsql
@@ -225,60 +281,64 @@ DB_SCHEMA=public
 DB_SSLMODE=require
 ```
 
+6. Jalankan migrasi:
+
+```bash
+php artisan migrate
+```
+
 > Jika compute Neon diatur *scale-to-zero*, query pertama setelah idle bisa lebih lambat. Perhatikan saat demo.
 
 ### Konfigurasi `config/database.php`
 
-Laravel secara bawaan memakai `sslmode=prefer`. Ubah ke `require` dan jadikan schema bisa diatur lewat `.env`:
+`config/database.php` sudah membaca `DB_SCHEMA` dan `DB_SSLMODE` dari `.env`:
 
 ```php
 'pgsql' => [
-    'driver' => 'pgsql',
-    'url' => env('DB_URL'),
-    'host' => env('DB_HOST', '127.0.0.1'),
-    'port' => env('DB_PORT', '5432'),
-    'database' => env('DB_DATABASE', 'laravel'),
-    'username' => env('DB_USERNAME', 'root'),
-    'password' => env('DB_PASSWORD', ''),
-    'charset' => env('DB_CHARSET', 'utf8'),
-    'prefix' => '',
-    'prefix_indexes' => true,
+    // ...
     'search_path' => env('DB_SCHEMA', 'public'),
-    'sslmode' => env('DB_SSLMODE', 'require'),
+    'sslmode' => env('DB_SSLMODE', 'prefer'),
 ],
 ```
 
+Untuk Neon, gunakan `DB_SCHEMA=public` dan `DB_SSLMODE=require`.
+
 ### Catatan penting
-- **Queue worker** (`php artisan queue:work`) adalah proses berumur panjang. Hubungkan ke direct connection atau session pooler, jangan transaction pooler.
+
+- **Queue worker** (`php artisan queue:work`) adalah proses berumur panjang. Gunakan direct connection, bukan pooled connection.
 - **Jangan commit** `DB_URL` atau password ke repositori.
-- Untuk development lokal, tim bisa memakai database Supabase/Neon yang sama (satu branch/project bersama) atau PostgreSQL lokal agar tidak saling menimpa data.
+- Untuk development lokal, tim bisa memakai project Neon yang sama atau PostgreSQL lokal agar tidak saling menimpa data.
 
 ---
 
 ## 📂 Struktur Folder
 
-Struktur standar Laravel + React (menyesuaikan implementasi):
+Struktur **target** (menyesuaikan implementasi). Repo saat ini masih skeleton Laravel.
 
 ```
 Buku-Tamu-Digital/
 ├── app/
+│   ├── Enums/              # StatusKunjungan, KlasifikasiStatus
 │   ├── Http/Controllers/
-│   ├── Jobs/              # Klasifikasi AI, kirim notifikasi
+│   ├── Jobs/               # KlasifikasiKunjungan, KirimNotifikasiKunjungan
 │   ├── Models/
-│   └── Services/          # AiClassifier, NotificationService, RekapService
+│   ├── Policies/           # Otorisasi per peran
+│   └── Services/           # AiClassifier, PenugasanService, NotificationService, RekapService
 ├── config/
 │   └── database.php
 ├── database/
 │   ├── migrations/
-│   └── seeders/
+│   └── seeders/            # Unit, pegawai, FAQ, contoh kunjungan
 ├── resources/
 │   ├── css/
-│   └── js/                # Komponen React (halaman tamu, kiosk, dashboard)
+│   └── js/
+│       ├── Pages/          # Tamu, Kiosk, Dashboard, Rating, Rekap
+│       └── Components/
 ├── routes/
 │   ├── web.php
-│   └── console.php        # Jadwal ringkasan mingguan
+│   └── console.php         # Cron/job terjadwal (belum dipakai di MVP)
 ├── .env.example
-├── vite.config.ts
+├── vite.config.js
 └── README.md
 ```
 
@@ -287,10 +347,11 @@ Buku-Tamu-Digital/
 ## 🚀 Instalasi
 
 ### Prasyarat
+
 - PHP ≥ 8.3 dengan ekstensi `pdo_pgsql`
 - Composer
 - Node.js dan npm
-- Akun Supabase atau Neon (atau PostgreSQL lokal)
+- Akun Neon (atau PostgreSQL lokal)
 - Git
 
 ### Langkah
@@ -309,7 +370,7 @@ cp .env.example .env
 php artisan key:generate
 
 # 4. Isi koneksi database di .env (lihat bagian Koneksi Database)
-#    Untuk Supabase: buat dulu schema `laravel`
+#    Neon: gunakan direct connection, DB_SCHEMA=public, DB_SSLMODE=require
 
 # 5. Migrasi dan seed data awal
 php artisan migrate --seed
@@ -322,6 +383,8 @@ npm run dev
 
 Buka `http://localhost:8000`.
 
+> **Catatan:** repo saat ini baru berisi skeleton Laravel. Migrasi domain, UI React/Inertia, dan fitur AI belum ada. Langkah di atas menjadi acuan setelah fitur mulai dibuat.
+
 ### Build untuk produksi
 
 ```bash
@@ -330,37 +393,43 @@ php artisan config:cache
 php artisan route:cache
 ```
 
-### Scheduler (ringkasan mingguan)
+### Scheduler (belum dipakai)
 
-Tambahkan cron di server:
+Ringkasan mingguan dihitung saat halaman dibuka, bukan lewat job terjadwal. Jika nanti ada job terjadwal, tambahkan cron:
 
 ```bash
 * * * * * cd /path/ke/proyek && php artisan schedule:run >> /dev/null 2>&1
 ```
 
+Queue worker di produksi sebaiknya dijalankan lewat Supervisor agar otomatis restart.
+
 ---
 
 ## ⚙️ Konfigurasi Environment
 
-Contoh variabel pada `.env` (nama variabel AI/WhatsApp menyesuaikan provider yang dipilih tim):
+Contoh variabel pada `.env`:
 
 ```env
 APP_NAME="Buku Tamu Digital"
 APP_URL=http://localhost:8000
 APP_TIMEZONE=Asia/Jakarta
 
-# Database (Supabase / Neon)
+# Database (Neon)
 DB_CONNECTION=pgsql
 DB_URL=
-DB_SCHEMA=laravel
+DB_SCHEMA=public
 DB_SSLMODE=require
 
 # Queue
 QUEUE_CONNECTION=database
 
-# AI (klasifikasi, FAQ, ringkasan mingguan)
+# AI - Kilo Gateway (endpoint kompatibel OpenAI)
+AI_BASE_URL=
 AI_API_KEY=
 AI_MODEL=
+AI_FALLBACK_MODELS=
+AI_TIMEOUT=30
+AI_MAX_RETRIES=2
 
 # Notifikasi
 MAIL_MAILER=smtp
@@ -374,30 +443,43 @@ WHATSAPP_API_TOKEN=
 
 ## 🔒 Privasi & Keamanan Data
 
-- **Tidak meminta foto KTP tamu.** Nomor HP saja sudah cukup untuk mengenali tamu yang sama.
-- Data yang dikumpulkan seminimal mungkin: nama, instansi, nomor HP, keperluan, tanda tangan digital.
+- **Tidak meminta foto KTP atau tanda tangan.** Nomor HP saja cukup untuk mengenali tamu yang sama.
+- Data yang dikumpulkan seminimal mungkin: nama, kategori, instansi, alamat, nomor HP, keperluan, dan rating.
+- Nomor HP disimpan dalam format ternormalisasi dan hanya dipakai untuk mengenali tamu serta mencari kunjungan selesai saat rating.
+- Tabel `rating` **tidak menyimpan nomor HP**; nomor hanya dipakai saat pencarian kunjungan.
 - Koneksi database memakai SSL (`sslmode=require`).
-- Aplikasi memakai schema khusus di Supabase agar tabel tidak terekspos lewat Data API di schema `public`.
+- Database Neon diakses langsung lewat driver `pgsql`; tidak ada Data API yang mengekspos tabel.
 - Halaman tamu tidak memerlukan login, sedangkan dashboard dilindungi autentikasi berbasis peran.
+- Perubahan klasifikasi/status mencatat `diubah_oleh` dan waktu perubahan sebagai jejak audit sederhana.
 - Rekap untuk pimpinan berupa data agregat.
+- QR hanya ada di meja resepsionis, membuka form, dan berada di area yang diawasi petugas. Form publik diberi rate limit.
+- Halaman status kunjungan memakai `kode_publik` acak, bukan ID berurutan, agar data tamu lain tidak mudah ditebak.
+- Teks yang dikirim ke AI hanya `keperluan`, tanpa identitas tamu.
+- **Kebijakan retensi data** (berapa lama data tamu disimpan) belum ditetapkan; perlu diputuskan sebelum produksi.
 
 ---
 
 ## 🗺 Roadmap
 
-- [ ] Setup proyek (Laravel, Inertia, Vite, React, Tailwind)
-- [ ] Koneksi PostgreSQL (Supabase/Neon) dan migrasi awal
-- [ ] Autentikasi dan manajemen peran
-- [ ] CRUD unit, pegawai, jam layanan, FAQ
-- [ ] Form tamu cepat dan pengenalan tamu via nomor HP
-- [ ] Mode kiosk dan QR per lokasi
-- [ ] Klasifikasi keperluan oleh AI (via queue)
-- [ ] Notifikasi WhatsApp/email ke pegawai
-- [ ] Status kunjungan dan dashboard pegawai
-- [ ] Tanda tangan digital dan rating
-- [ ] Asisten tanya-jawab (FAQ)
+- [x] Setup proyek (Laravel 13, Vite, Tailwind)
+- [x] Dokumen desain sistem (ERD, UML, wireframe, aturan bisnis)
+- [ ] Konfigurasi PostgreSQL (Neon) dan migrasi awal
+- [ ] Autentikasi dan manajemen peran (`admin`, `resepsionis`, `pegawai`, `pimpinan`)
+- [ ] CRUD unit, pegawai, jam layanan, dan FAQ
+- [ ] Form tamu cepat, cek tamu lama via nomor HP, dan QR meja resepsionis
+- [ ] Pasang Inertia + React + TypeScript + shadcn/ui
+- [ ] Integrasi Kilo Gateway: klasifikasi, fallback model, validasi JSON
+- [ ] Queue klasifikasi + penugasan pegawai + notifikasi WhatsApp/email
+- [ ] Halaman status kunjungan dengan polling Inertia
+- [ ] Dashboard resepsionis (koreksi AI, ganti pegawai, tandai tidak terlayani)
+- [ ] Dashboard pegawai (tandai dilayani/selesai)
+- [ ] Rating via nomor HP (hanya kunjungan selesai)
+- [ ] Asisten tanya-jawab FAQ
 - [ ] Rekap harian/bulanan, ekspor, dan cetak
-- [ ] Ringkasan mingguan AI untuk pimpinan
+- [ ] Ringkasan mingguan AI untuk pimpinan (on-demand + cache)
+- [ ] Test fitur, seed data demo, dan skenario presentasi
+- [ ] Deployment (Supervisor queue, HTTPS, backup)
+- [ ] Tanda tangan digital opsional (di luar MVP)
 
 ---
 
@@ -413,6 +495,7 @@ WHATSAPP_API_TOKEN=
 | _Nama anggota 6_ | _Contoh: Fullstack_ |
 
 ### Alur Kontribusi
+
 1. Buat branch dari `main`: `git checkout -b feat/nama-fitur`
 2. Commit dengan pesan jelas: `git commit -m "feat: tambah form tamu"`
 3. Push dan buat Pull Request untuk di-review anggota lain.
