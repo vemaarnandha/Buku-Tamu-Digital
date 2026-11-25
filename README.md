@@ -6,7 +6,7 @@ Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pela
 
 **Cocok untuk:** BPS, Perpustakaan Bung Karno, Dinas Pendidikan, Kantor Kecamatan, dan instansi sejenis.
 
-**Dokumen terkait:** [Desain Sistem Buku Tamu Digital](Desain%20Sistem%20Buku%20Tamu%20Digital.md) — ERD, UML, wireframe, aturan bisnis, dan kontrak AI.
+**Dokumen terkait:** [Desain Sistem Buku Tamu Digital](./docs/Desain%20Sistem%20Buku%20Tamu%20Digital.md) — ERD, UML, wireframe, aturan bisnis, dan kontrak AI.
 
 ---
 
@@ -18,7 +18,7 @@ Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pela
 | Skeleton Laravel 13 | ✅ | Baru model `User` dan migrasi dasar |
 | Database Neon | 🚧 | Isi `DB_URL` di `.env`, lalu jalankan migrasi |
 | Model & migrasi domain | 🚧 | `units`, `pegawai`, `tamu`, `kunjungan`, dll. belum dibuat |
-| UI React + Inertia | 🚧 | Belum dipasang |
+| UI React + Inertia | ✅ | Inertia 3, React 19, TypeScript, shadcn/ui terpasang |
 | Auth & manajemen peran | 🚧 | — |
 | AI Kilo Gateway | 🚧 | Perlu daftar model gratis |
 | Queue & notifikasi | 🚧 | Tabel `jobs` sudah ada |
@@ -152,7 +152,7 @@ flowchart LR
 | 11 | Ringkasan mingguan **tidak disimpan di tabel**. | Dihitung saat halaman pimpinan dibuka dan di-cache sebentar; tidak perlu tabel laporan. |
 | 12 | Tamu diarahkan ke **ruang tamu unit tujuan**; pegawai menemui tamu di sana. | Memakai `units.lokasi_ruang`; tidak perlu tabel ruang baru. |
 
-Detail aturan, ERD, dan UML ada di [dokumen desain](Desain%20Sistem%20Buku%20Tamu%20Digital.md).
+Detail aturan, ERD, dan UML ada di [dokumen desain](./docs/Desain%20Sistem%20Buku%20Tamu%20Digital.md).
 
 ---
 
@@ -173,7 +173,7 @@ Detail aturan, ERD, dan UML ada di [dokumen desain](Desain%20Sistem%20Buku%20Tam
 - Model gratis dari **Kilo Gateway** dicoba berurutan: model utama, lalu daftar fallback. Jika semua gagal, job di-retry; setelah batas retry, kunjungan masuk daftar perlu ditinjau.
 - Asisten FAQ dibatasi pada FAQ aktif. Jika jawaban tidak ada, asisten menyarankan bertanya ke petugas.
 
-Kontrak output, fallback, dan aturan validasi lengkap ada di [dokumen desain §5](Desain%20Sistem%20Buku%20Tamu%20Digital.md#5-kontrak-ai).
+Kontrak output, fallback, dan aturan validasi lengkap ada di [dokumen desain §5](./docs/Desain%20Sistem%20Buku%20Tamu%20Digital.md#5-kontrak-ai).
 
 ---
 
@@ -182,10 +182,10 @@ Kontrak output, fallback, dan aturan validasi lengkap ada di [dokumen desain §5
 | Lapisan | Teknologi | Status |
 |---|---|---|
 | Backend | [Laravel](https://laravel.com) 13 (PHP ≥ 8.3) | ✅ terpasang |
-| Jembatan FE-BE | [Inertia.js](https://inertiajs.com) v3 | 🚧 rencana |
-| Frontend | [React](https://react.dev) 19 + TypeScript | 🚧 rencana |
+| Jembatan FE-BE | [Inertia.js](https://inertiajs.com) v3 | ✅ terpasang |
+| Frontend | [React](https://react.dev) 19 + TypeScript | ✅ terpasang |
 | Build tool | [Vite](https://vite.dev) 8 | ✅ terpasang |
-| Styling & UI | [Tailwind CSS](https://tailwindcss.com) v4 + [shadcn/ui](https://ui.shadcn.com) | Tailwind ✅, shadcn 🚧 |
+| Styling & UI | [Tailwind CSS](https://tailwindcss.com) v4 + [shadcn/ui](https://ui.shadcn.com) | ✅ terpasang |
 | Database | PostgreSQL via [Neon](https://neon.com) | 🚧 konfigurasi |
 | Auth & peran | Auth bawaan Laravel + kolom `role` | 🚧 rencana |
 | Antrean | Laravel Queue (`database`) | ✅ tabel queue tersedia |
@@ -225,7 +225,7 @@ Ringkasan mingguan tidak memakai job/scheduler; halaman pimpinan menghitungnya s
 
 ## 🗄 Struktur Database
 
-**8 tabel.** ERD lengkap ada di [dokumen desain §1](Desain%20Sistem%20Buku%20Tamu%20Digital.md#1-erd).
+**8 tabel.** ERD lengkap ada di [dokumen desain §1](./docs/Desain%20Sistem%20Buku%20Tamu%20Digital.md#1-erd).
 
 | Tabel | Isi |
 |---|---|
@@ -467,7 +467,7 @@ WHATSAPP_API_TOKEN=
 - [ ] Autentikasi dan manajemen peran (`admin`, `resepsionis`, `pegawai`, `pimpinan`)
 - [ ] CRUD unit, pegawai, jam layanan, dan FAQ
 - [ ] Form tamu cepat, cek tamu lama via nomor HP, dan QR meja resepsionis
-- [ ] Pasang Inertia + React + TypeScript + shadcn/ui
+- [x] Pasang Inertia + React + TypeScript + shadcn/ui
 - [ ] Integrasi Kilo Gateway: klasifikasi, fallback model, validasi JSON
 - [ ] Queue klasifikasi + penugasan pegawai + notifikasi WhatsApp/email
 - [ ] Halaman status kunjungan dengan polling Inertia
