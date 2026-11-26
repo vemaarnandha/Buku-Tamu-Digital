@@ -147,6 +147,16 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 </laravel-boost-guidelines>
 
+## UI / Frontend Conventions (shadcn + glassmorphism)
+
+- Semua UI wajib memakai komponen shadcn dari `resources/js/components/ui/*` (button, card, input, label, textarea, dialog, dropdown-menu, checkbox, badge, alert, avatar, separator). Jangan gunakan lagi komponen legacy Breeze di `resources/js/Components/*` (sudah dihapus; `InputError` & `ApplicationLogo` pengecualian).
+- Tema default **dark purple** dengan glassmorphism subtle: card/navbar/dialog/dropdown memakai `bg-card/55 ... backdrop-blur-xl` dan border `ring-white/10` (lihat `resources/css/app.css` & `components/ui/card.tsx`). Gunakan utility `glass` / `glass-strong` bila perlu.
+- Warna aksen ungu: primary `oklch(0.68 0.24 292)` (dark). Gunakan token (`text-primary`, `bg-primary`, `text-muted-foreground`, `text-destructive`) bukan warna hard-coded.
+- Status/alert gunakan translucent border+bg (sky/amber/emerald/red /40 + /10) agar kontras di dark theme.
+- Komponen base-ui memakai prop `render` (bukan `asChild`) untuk komposisi (contoh: `<Button render={<Link .../>}>`).
+- Setiap surface glass harus tetap memenuhi kontras WCAG AA; glass hanya di surface penting, bukan full-page.
+- Sebelum menambah komponen UI baru, cek `resources/js/components/ui/` dan install via `npx shadcn@latest add <name>`.
+
 ## Workflow Fase Implementasi (Project-Specific)
 
 Saat diminta mengerjakan fase berikutnya dari `docs/RENCANA_IMPLEMENTASI.md`:
