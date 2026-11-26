@@ -165,15 +165,15 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Middleware `role` atau policy per model.
-- [ ] Redirect `/dashboard` sesuai peran:
+- [x] Middleware `role` atau policy per model.
+- [x] Redirect `/dashboard` sesuai peran:
   - admin/resepsionis → antrean kunjungan,
   - pegawai → tugas sendiri,
   - pimpinan → rekap/ringkasan.
-- [ ] Policy untuk kunjungan, master data, user, dan laporan.
-- [ ] Nonaktifkan registrasi publik.
-- [ ] Seed akun demo lokal untuk setiap peran.
-- [ ] Pastikan user `aktif = false` tidak bisa login.
+- [x] Policy untuk kunjungan, master data, user, dan laporan.
+- [x] Nonaktifkan registrasi publik.
+- [x] Seed akun demo lokal untuk setiap peran.
+- [x] Pastikan user `aktif = false` tidak bisa login.
 
 **Matriks akses mengikuti §4.8 dokumen desain:**
 

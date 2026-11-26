@@ -19,7 +19,7 @@ Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pela
 | Database Neon | ✅ | Migrasi diterapkan dan seed data tersedia |
 | Model & migrasi domain | ✅ | 8 tabel domain, model, enum, factory, dan seeder tersedia |
 | UI React + Inertia | ✅ | Inertia 3, React 19, TypeScript, shadcn/ui terpasang |
-| Auth & manajemen peran | 🚧 | — |
+| Auth & manajemen peran | 🚧 | Fase 2 selesai: login, role middleware, policy, redirect dashboard; CRUD pengguna Fase 7 |
 | AI Kilo Gateway | 🚧 | Perlu daftar model gratis |
 | Queue & notifikasi | 🚧 | Tabel `jobs` sudah ada |
 | Testing | 🚧 | PHPUnit tersedia; test domain belum |
