@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\Dashboard\FaqController as DashboardFaqController;
+use App\Http\Controllers\Dashboard\JamLayananController as DashboardJamLayananController;
 use App\Http\Controllers\Dashboard\KunjunganController as DashboardKunjunganController;
+use App\Http\Controllers\Dashboard\PegawaiController as DashboardPegawaiController;
+use App\Http\Controllers\Dashboard\UnitController as DashboardUnitController;
+use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
 use App\Http\Controllers\Dashboard\TugasController as DashboardTugasController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqController;
@@ -38,11 +43,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/tugas', [DashboardTugasController::class, 'index'])->middleware('role:pegawai')->name('dashboard.tugas.index');
     Route::get('/dashboard/rekap', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin,pimpinan')->name('dashboard.rekap.index');
     Route::get('/dashboard/ringkasan', fn () => Inertia::render('Dashboard'))->middleware('role:admin,pimpinan')->name('dashboard.ringkasan.index');
-    Route::get('/dashboard/units', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.units.index');
-    Route::get('/dashboard/pegawai', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.pegawai.index');
-    Route::get('/dashboard/jam-layanan', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.jam-layanan.index');
-    Route::get('/dashboard/faq', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.faq.index');
-    Route::get('/dashboard/users', fn () => Inertia::render('Dashboard'))->middleware('role:admin')->name('dashboard.users.index');
+
+    Route::prefix('dashboard')->group(function () {
+        Route::middleware('role:resepsionis,admin')->group(function () {
+            Route::resource('units', DashboardUnitController::class)->names('dashboard.units');
+            Route::resource('pegawai', DashboardPegawaiController::class)->names('dashboard.pegawai');
+            Route::resource('jam-layanan', DashboardJamLayananController::class)->names('dashboard.jam-layanan');
+            Route::resource('faq', DashboardFaqController::class)->names('dashboard.faq');
+        });
+
+        Route::middleware('role:admin')->group(function () {
+            Route::resource('users', DashboardUserController::class)->names('dashboard.users');
+        });
+    });
 });
 
 Route::middleware('auth')->group(function () {

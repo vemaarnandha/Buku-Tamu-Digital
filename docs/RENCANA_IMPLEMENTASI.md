@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, Fase 5, dan Fase 6 selesai dieksekusi (rating dan FAQ)  
+> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, Fase 5, Fase 6, dan Fase 7 selesai dieksekusi (master data)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -387,19 +387,19 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] CRUD unit.
-- [ ] CRUD pegawai.
-- [ ] CRUD jam layanan.
-- [ ] CRUD FAQ.
-- [ ] CRUD user dan peran (admin).
-- [ ] Validasi:
+- [x] CRUD unit.
+- [x] CRUD pegawai.
+- [x] CRUD jam layanan.
+- [x] CRUD FAQ.
+- [x] CRUD user dan peran (admin).
+- [x] Validasi:
   - kode unit unik,
   - `user_id` pegawai unik,
   - jam mulai < jam selesai,
   - hari valid,
   - role valid.
-- [ ] Gunakan `aktif = false` untuk menonaktifkan data yang sudah dipakai.
-- [ ] Hubungkan `pegawai.user_id` agar pegawai bisa login.
+- [x] Gunakan `aktif = false` untuk menonaktifkan data yang sudah dipakai.
+- [x] Hubungkan `pegawai.user_id` agar pegawai bisa login.
 
 **Deliverable:**
 
