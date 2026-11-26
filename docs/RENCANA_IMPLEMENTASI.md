@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0 dan Fase 1 selesai dieksekusi (Inertia, React, TypeScript, shadcn/ui, Breeze auth, Neon, PostgreSQL test, domain database/model/seeder)  
+> **Status:** Fase 0, Fase 1, Fase 2, dan Fase 3 selesai dieksekusi (alur tamu publik, lookup, status polling)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -202,22 +202,22 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Halaman `GET /` untuk form kiosk/QR resepsionis.
-- [ ] Endpoint Inertia `GET /kunjungan/create` untuk lookup `no_hp` (partial reload).
-- [ ] `POST /kunjungan` untuk menyimpan tamu baru/lama dan kunjungan.
-- [ ] Halaman `GET /kunjungan/{kode_publik}/status`.
-- [ ] Polling status setiap ±3 detik selama `klasifikasi_status = diproses`.
-- [ ] Tampilkan kondisi:
+- [x] Halaman `GET /` untuk form kiosk/QR resepsionis.
+- [x] Endpoint Inertia `GET /kunjungan/create` untuk lookup `no_hp` (partial reload).
+- [x] `POST /kunjungan` untuk menyimpan tamu baru/lama dan kunjungan.
+- [x] Halaman `GET /kunjungan/{kode_publik}/status`.
+- [x] Polling status setiap ±3 detik selama `klasifikasi_status = diproses`.
+- [x] Tampilkan kondisi:
   - sedang diproses,
   - berhasil diklasifikasi + arahan ruang tamu unit,
   - perlu ditinjau,
   - tidak terlayani,
   - selesai + tautan rating.
-- [ ] Rate limit form publik.
-- [ ] Tombol submit dinonaktifkan setelah diklik.
-- [ ] Validasi server untuk mencegah submit ganda.
-- [ ] Tampilkan peringatan di luar jam layanan.
-- [ ] QR statis di meja resepsionis cukup mengarah ke `/`; tidak perlu tabel lokasi QR.
+- [x] Rate limit form publik.
+- [x] Tombol submit dinonaktifkan setelah diklik.
+- [x] Validasi server untuk mencegah submit ganda.
+- [x] Tampilkan peringatan di luar jam layanan.
+- [x] QR statis di meja resepsionis cukup mengarah ke `/`; tidak perlu tabel lokasi QR.
 
 **Perilaku tamu lama:**
 
