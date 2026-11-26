@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -14,9 +15,22 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+// Role-protected dashboard areas (placeholders for later phases)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard/kunjungan', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.kunjungan.index');
+    Route::get('/dashboard/tugas', fn () => Inertia::render('Dashboard'))->middleware('role:pegawai')->name('dashboard.tugas.index');
+    Route::get('/dashboard/rekap', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin,pimpinan')->name('dashboard.rekap.index');
+    Route::get('/dashboard/ringkasan', fn () => Inertia::render('Dashboard'))->middleware('role:admin,pimpinan')->name('dashboard.ringkasan.index');
+    Route::get('/dashboard/units', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.units.index');
+    Route::get('/dashboard/pegawai', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.pegawai.index');
+    Route::get('/dashboard/jam-layanan', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.jam-layanan.index');
+    Route::get('/dashboard/faq', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin')->name('dashboard.faq.index');
+    Route::get('/dashboard/users', fn () => Inertia::render('Dashboard'))->middleware('role:admin')->name('dashboard.users.index');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
