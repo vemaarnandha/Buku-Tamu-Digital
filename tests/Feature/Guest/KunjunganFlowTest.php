@@ -3,14 +3,23 @@
 namespace Tests\Feature\Guest;
 
 use App\Enums\StatusKunjungan;
+use App\Jobs\KlasifikasiKunjungan;
 use App\Models\Kunjungan;
 use App\Models\Tamu;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class KunjunganFlowTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Queue::fake();
+    }
 
     public function test_form_page_renders(): void
     {
@@ -51,6 +60,7 @@ class KunjunganFlowTest extends TestCase
         $this->assertSame('menunggu', $kunjungan->status->value);
         $this->assertSame('diproses', $kunjungan->klasifikasi_status->value);
         $this->assertNotSame((string) $kunjungan->id, $kunjungan->kode_publik);
+        Queue::assertPushed(KlasifikasiKunjungan::class, fn ($job) => $job->kunjungan->is($kunjungan));
     }
 
     public function test_store_existing_tamu_updates_master(): void
