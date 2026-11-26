@@ -171,8 +171,9 @@ Saat diminta mengerjakan fase berikutnya dari `docs/RENCANA_IMPLEMENTASI.md`:
    - `npm run build` lulus jika ada perubahan frontend.
    - `vendor/bin/pint --dirty --format agent` untuk file PHP.
 
-5. **Commit atomik**
-   - Gunakan conventional commit (`feat:`, `chore:`, `docs:`, `test:`).
+5. **Commit atomik (hanya setelah ACC user)**
+   - Jangan commit otomatis. Tanyakan dan tunggu persetujuan (ACC) user sebelum melakukan commit.
+   - Setelah ACC, gunakan conventional commit (`feat:`, `chore:`, `docs:`, `test:`).
    - Pisahkan commit untuk concern berbeda (DB, auth, docs, tooling).
    - Jangan commit `.env`, `node_modules`, `vendor`, `public/build`.
 
