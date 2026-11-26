@@ -20,8 +20,8 @@ Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pela
 | Model & migrasi domain | ✅ | 8 tabel domain, model, enum, factory, dan seeder tersedia |
 | UI React + Inertia | ✅ | Inertia 3, React 19, TypeScript, shadcn/ui terpasang |
 | Auth & manajemen peran | 🚧 | Fase 2 selesai: login, role middleware, policy, redirect dashboard; CRUD pengguna Fase 7 |
-| AI Kilo Gateway | 🚧 | Perlu daftar model gratis |
-| Queue & notifikasi | 🚧 | Tabel `jobs` sudah ada |
+| AI Kilo Gateway | ✅ | `config/ai.php`, `AiClassifier`, fallback model, job klasifikasi |
+| Queue & notifikasi | ✅ | Job `KlasifikasiKunjungan` & `KirimNotifikasiKunjungan`, driver log + email, interface WhatsApp |
 | Testing | 🚧 | PHPUnit tersedia; test domain belum |
 | Deployment | 🚧 | — |
 
@@ -454,8 +454,11 @@ AI_MAX_RETRIES=2
 
 # Notifikasi
 MAIL_MAILER=smtp
+WHATSAPP_DRIVER=log
 WHATSAPP_API_URL=
 WHATSAPP_API_TOKEN=
+WHATSAPP_TIMEOUT=15
+NOTIFIKASI_EMAIL_ENABLED=true
 ```
 
 > ⚠️ **Jangan pernah commit file `.env`, password database, atau API key ke repositori.**
@@ -489,8 +492,8 @@ WHATSAPP_API_TOKEN=
 - [ ] CRUD unit, pegawai, jam layanan, dan FAQ
 - [ ] Form tamu cepat, cek tamu lama via nomor HP, dan QR meja resepsionis
 - [x] Pasang Inertia + React + TypeScript + shadcn/ui
-- [ ] Integrasi Kilo Gateway: klasifikasi, fallback model, validasi JSON
-- [ ] Queue klasifikasi + penugasan pegawai + notifikasi WhatsApp/email
+- [x] Integrasi Kilo Gateway: klasifikasi, fallback model, validasi JSON
+- [x] Queue klasifikasi + penugasan pegawai + notifikasi WhatsApp/email
 - [ ] Halaman status kunjungan dengan polling Inertia
 - [ ] Dashboard resepsionis (koreksi AI, ganti pegawai, tandai tidak terlayani)
 - [ ] Dashboard pegawai (tandai dilayani/selesai)

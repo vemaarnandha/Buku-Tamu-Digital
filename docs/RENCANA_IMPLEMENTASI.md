@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0, Fase 1, Fase 2, dan Fase 3 selesai dieksekusi (alur tamu publik, lookup, status polling)  
+> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, dan Fase 4 selesai dieksekusi (alur tamu publik, AI, penugasan, notifikasi)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -246,45 +246,45 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Buat `config/ai.php` yang membaca:
+- [x] Buat `config/ai.php` yang membaca:
   - `AI_BASE_URL`
   - `AI_API_KEY`
   - `AI_MODEL`
   - `AI_FALLBACK_MODELS`
   - `AI_TIMEOUT`
   - `AI_MAX_RETRIES`
-- [ ] Buat `AiClassifier` dengan HTTP client Laravel.
-- [ ] Buat DTO hasil klasifikasi:
+- [x] Buat `AiClassifier` dengan HTTP client Laravel.
+- [x] Buat DTO hasil klasifikasi:
   - `unit_kode`
   - `kategori`
   - `ringkasan`
   - `confidence`
-- [ ] Implementasikan fallback model:
+- [x] Implementasikan fallback model:
   - timeout,
   - HTTP 429,
   - HTTP 5xx,
   - JSON tidak valid.
-- [ ] Validasi hasil:
+- [x] Validasi hasil:
   - unit dikenal,
   - confidence minimal 0.70,
   - kategori dan ringkasan tidak kosong.
-- [ ] Buat job `KlasifikasiKunjungan`.
-- [ ] Job mengisi unit/kategori/ringkasan dan `klasifikasi_status`.
-- [ ] Buat `PenugasanService`:
+- [x] Buat job `KlasifikasiKunjungan`.
+- [x] Job mengisi unit/kategori/ringkasan dan `klasifikasi_status`.
+- [x] Buat `PenugasanService`:
   - unit sama,
   - `aktif = true`,
   - `bisa_menerima_tamu = true`,
   - beban aktif paling sedikit,
   - `terakhir_ditugaskan_pada` paling lama,
   - `id` paling kecil.
-- [ ] Gunakan transaksi dan lock saat memilih pegawai.
-- [ ] Jika tidak ada pegawai: `pegawai_id = null` dan tampil di filter “belum ada pegawai/perlu ditinjau”.
-- [ ] Buat job `KirimNotifikasiKunjungan`.
-- [ ] MVP notifikasi: driver `log` + email.
-- [ ] Siapkan interface untuk Fonnte/WhatsApp Cloud API.
-- [ ] Isi `notifikasi_terkirim_pada` jika berhasil.
-- [ ] Retry/backoff dan catat kegagalan.
-- [ ] Halaman status polling sampai klasifikasi selesai.
+- [x] Gunakan transaksi dan lock saat memilih pegawai.
+- [x] Jika tidak ada pegawai: `pegawai_id = null` dan tampil di filter “belum ada pegawai/perlu ditinjau”.
+- [x] Buat job `KirimNotifikasiKunjungan`.
+- [x] MVP notifikasi: driver `log` + email.
+- [x] Siapkan interface untuk Fonnte/WhatsApp Cloud API.
+- [x] Isi `notifikasi_terkirim_pada` jika berhasil.
+- [x] Retry/backoff dan catat kegagalan.
+- [x] Halaman status polling sampai klasifikasi selesai.
 
 **Deliverable:**
 
