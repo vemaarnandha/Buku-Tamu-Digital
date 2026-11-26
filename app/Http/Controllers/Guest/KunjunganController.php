@@ -7,6 +7,7 @@ use App\Enums\KlasifikasiStatus;
 use App\Enums\StatusKunjungan;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Guest\StoreKunjunganRequest;
+use App\Jobs\KlasifikasiKunjungan;
 use App\Models\JamLayanan;
 use App\Models\Kunjungan;
 use App\Models\Tamu;
@@ -89,6 +90,8 @@ class KunjunganController extends Controller
             'klasifikasi_status' => KlasifikasiStatus::Diproses,
             'waktu_datang' => now(),
         ]);
+
+        KlasifikasiKunjungan::dispatch($kunjungan);
 
         return redirect()->route('kunjungan.status', ['kode_publik' => $kunjungan->kode_publik]);
     }

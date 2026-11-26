@@ -15,6 +15,9 @@ use App\Policies\KunjunganPolicy;
 use App\Policies\PegawaiPolicy;
 use App\Policies\UnitPolicy;
 use App\Policies\UserPolicy;
+use App\Services\Notifikasi\FonnteWhatsAppGateway;
+use App\Services\Notifikasi\LogWhatsAppGateway;
+use App\Services\Notifikasi\WhatsAppGateway;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -26,7 +29,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(WhatsAppGateway::class, function (): WhatsAppGateway {
+            return match (config('notifikasi.whatsapp.driver')) {
+                'fonnte' => new FonnteWhatsAppGateway,
+                default => new LogWhatsAppGateway,
+            };
+        });
     }
 
     /**
