@@ -44,6 +44,7 @@ Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pela
 - [Koneksi Database (Neon)](#-koneksi-database-neon)
 - [Struktur Folder](#-struktur-folder)
 - [Instalasi](#-instalasi)
+- [Akun Uji Akses (Demo)](#-akun-uji-akses-demo)
 - [Konfigurasi Environment](#-konfigurasi-environment)
 - [Privasi & Keamanan Data](#-privasi--keamanan-data)
 - [Roadmap](#-roadmap)
@@ -402,6 +403,26 @@ Ringkasan mingguan dihitung saat halaman dibuka, bukan lewat job terjadwal. Jika
 ```
 
 Queue worker di produksi sebaiknya dijalankan lewat Supervisor agar otomatis restart.
+
+---
+
+## 🔑 Akun Uji Akses (Demo)
+
+Akun berikut dibuat oleh `DatabaseSeeder` saat menjalankan `php artisan migrate --seed` atau `php artisan db:seed`. Semua akun memakai password yang sama: **`password`**.
+
+| Peran | Email | Akses awal |
+|---|---|---|
+| Admin | `admin@example.com` | Antrean kunjungan + seluruh akses resepsionis + pengguna & peran |
+| Resepsionis | `resepsionis@example.com` | Antrean kunjungan dan pengelolaan operasional |
+| Pegawai Unit Data 1 | `pegawai.data.1@example.com` | Tugas sendiri |
+| Pegawai Unit Data 2 | `pegawai.data.2@example.com` | Tugas sendiri |
+| Pegawai Unit Umum 1 | `pegawai.umum.1@example.com` | Tugas sendiri |
+| Pegawai Unit Umum 2 | `pegawai.umum.2@example.com` | Tugas sendiri |
+| Pegawai Unit Kepegawaian 1 | `pegawai.kepegawaian.1@example.com` | Tugas sendiri |
+| Pegawai Unit Kepegawaian 2 | `pegawai.kepegawaian.2@example.com` | Tugas sendiri |
+| Pimpinan | `pimpinan@example.com` | Rekap & ringkasan (read-only) |
+
+> ⚠️ Akun ini hanya untuk pengembangan, demo, dan pengujian lokal. Ganti atau hapus sebelum aplikasi dipakai di produksi.
 
 ---
 
