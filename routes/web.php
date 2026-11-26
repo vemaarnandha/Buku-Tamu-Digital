@@ -4,6 +4,8 @@ use App\Http\Controllers\Dashboard\FaqController as DashboardFaqController;
 use App\Http\Controllers\Dashboard\JamLayananController as DashboardJamLayananController;
 use App\Http\Controllers\Dashboard\KunjunganController as DashboardKunjunganController;
 use App\Http\Controllers\Dashboard\PegawaiController as DashboardPegawaiController;
+use App\Http\Controllers\Dashboard\RekapController as DashboardRekapController;
+use App\Http\Controllers\Dashboard\RingkasanController as DashboardRingkasanController;
 use App\Http\Controllers\Dashboard\UnitController as DashboardUnitController;
 use App\Http\Controllers\Dashboard\UserController as DashboardUserController;
 use App\Http\Controllers\Dashboard\TugasController as DashboardTugasController;
@@ -41,8 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/dashboard/kunjungan/{kunjungan}/pegawai', [DashboardKunjunganController::class, 'pegawai'])->middleware('role:resepsionis,admin')->name('dashboard.kunjungan.pegawai');
     Route::patch('/dashboard/kunjungan/{kunjungan}/status', [DashboardKunjunganController::class, 'status'])->middleware('role:resepsionis,admin,pegawai')->name('dashboard.kunjungan.status');
     Route::get('/dashboard/tugas', [DashboardTugasController::class, 'index'])->middleware('role:pegawai')->name('dashboard.tugas.index');
-    Route::get('/dashboard/rekap', fn () => Inertia::render('Dashboard'))->middleware('role:resepsionis,admin,pimpinan')->name('dashboard.rekap.index');
-    Route::get('/dashboard/ringkasan', fn () => Inertia::render('Dashboard'))->middleware('role:admin,pimpinan')->name('dashboard.ringkasan.index');
+    Route::get('/dashboard/rekap', [DashboardRekapController::class, 'index'])->middleware('role:resepsionis,admin,pimpinan')->name('dashboard.rekap.index');
+    Route::get('/dashboard/ringkasan', [DashboardRingkasanController::class, 'index'])->middleware('role:admin,pimpinan')->name('dashboard.ringkasan.index');
 
     Route::prefix('dashboard')->group(function () {
         Route::middleware('role:resepsionis,admin')->group(function () {

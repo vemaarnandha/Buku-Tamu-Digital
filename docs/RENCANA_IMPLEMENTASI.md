@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, Fase 5, Fase 6, dan Fase 7 selesai dieksekusi (master data)  
+> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, Fase 5, Fase 6, Fase 7, dan Fase 8 selesai dieksekusi (rekap)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -420,22 +420,22 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Halaman rekap dengan filter periode, unit, status, kategori.
-- [ ] Agregat:
+- [x] Halaman rekap dengan filter periode, unit, status, kategori.
+- [x] Agregat:
   - total kunjungan,
   - per unit,
   - kategori terbanyak,
   - rata-rata rating,
   - jumlah tidak terlayani.
-- [ ] Grafik Recharts.
-- [ ] Ekspor CSV terlebih dahulu.
-- [ ] Halaman ringkasan mingguan.
-- [ ] Hitung agregat minggu sebelumnya.
-- [ ] Kirim agregat ke AI untuk narasi.
-- [ ] Cache hasil ±1 jam.
-- [ ] Tombol “coba lagi” untuk membersihkan cache.
-- [ ] Jika AI gagal, tetap tampilkan statistik angka.
-- [ ] Tidak ada tabel `ringkasan_mingguan` dan tidak ada scheduler.
+- [x] Grafik Recharts.
+- [x] Ekspor CSV terlebih dahulu.
+- [x] Halaman ringkasan mingguan.
+- [x] Hitung agregat minggu sebelumnya.
+- [x] Kirim agregat ke AI untuk narasi.
+- [x] Cache hasil ±1 jam.
+- [x] Tombol “coba lagi” untuk membersihkan cache.
+- [x] Jika AI gagal, tetap tampilkan statistik angka.
+- [x] Tidak ada tabel `ringkasan_mingguan` dan tidak ada scheduler.
 
 **Deliverable:**
 
