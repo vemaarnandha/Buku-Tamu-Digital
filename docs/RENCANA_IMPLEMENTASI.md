@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** sebagian Fase 0 sudah dieksekusi (Inertia, React, TypeScript, shadcn/ui); selebihnya masih rencana  
+> **Status:** Fase 0 selesai dieksekusi (Inertia, React, TypeScript, shadcn/ui, Breeze auth, Neon, PostgreSQL test)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -76,12 +76,12 @@ Pekerjaan:
 - [x] Install Inertia.js server adapter.
 - [x] Install React 19 + TypeScript + `@vitejs/plugin-react`.
 - [x] Install dan konfigurasi shadcn/ui dengan Tailwind 4.
-- [ ] Install Laravel Breeze React + TypeScript untuk scaffolding auth.
-- [ ] Nonaktifkan route registrasi publik.
-- [ ] Buat layout auth dan layout dashboard dasar.
-- [ ] Isi `.env` Neon: `DB_URL`, `DB_SCHEMA=public`, `DB_SSLMODE=require`.
+- [x] Install Laravel Breeze React + TypeScript untuk scaffolding auth.
+- [x] Nonaktifkan route registrasi publik.
+- [x] Buat layout auth dan layout dashboard dasar.
+- [x] Isi `.env` Neon: `DB_URL`, `DB_SCHEMA=public`, `DB_SSLMODE=require`.
 - [x] Pastikan ekstensi `pdo_pgsql` aktif.
-- [ ] Siapkan database test PostgreSQL dan sesuaikan `phpunit.xml`.
+- [x] Siapkan database test PostgreSQL dan sesuaikan `phpunit.xml`.
 - [x] Perbarui tautan dokumen di `README.md` ke folder `docs/`.
 
 **Deliverable:**
