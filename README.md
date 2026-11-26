@@ -16,8 +16,8 @@ Buku tamu digital dengan **asisten resepsionis berbasis AI** untuk instansi pela
 |---|---|---|
 | Dokumentasi & desain | ✅ | README + dokumen desain |
 | Skeleton Laravel 13 | ✅ | Baru model `User` dan migrasi dasar |
-| Database Neon | 🚧 | Isi `DB_URL` di `.env`, lalu jalankan migrasi |
-| Model & migrasi domain | 🚧 | `units`, `pegawai`, `tamu`, `kunjungan`, dll. belum dibuat |
+| Database Neon | ✅ | Migrasi diterapkan dan seed data tersedia |
+| Model & migrasi domain | ✅ | 8 tabel domain, model, enum, factory, dan seeder tersedia |
 | UI React + Inertia | ✅ | Inertia 3, React 19, TypeScript, shadcn/ui terpasang |
 | Auth & manajemen peran | 🚧 | — |
 | AI Kilo Gateway | 🚧 | Perlu daftar model gratis |

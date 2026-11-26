@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0 selesai dieksekusi (Inertia, React, TypeScript, shadcn/ui, Breeze auth, Neon, PostgreSQL test)  
+> **Status:** Fase 0 dan Fase 1 selesai dieksekusi (Inertia, React, TypeScript, shadcn/ui, Breeze auth, Neon, PostgreSQL test, domain database/model/seeder)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -107,31 +107,31 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Ubah migrasi `users`: tambah `role`, `aktif`.
-- [ ] Buat migrasi `units`.
-- [ ] Buat migrasi `jam_layanan`.
-- [ ] Buat migrasi `pegawai`.
-- [ ] Buat migrasi `tamu`.
-- [ ] Buat migrasi `kunjungan`.
-- [ ] Buat migrasi `faq`.
-- [ ] Buat migrasi `rating`.
-- [ ] Buat enum PHP:
+- [x] Ubah migrasi `users`: tambah `role`, `aktif`.
+- [x] Buat migrasi `units`.
+- [x] Buat migrasi `jam_layanan`.
+- [x] Buat migrasi `pegawai`.
+- [x] Buat migrasi `tamu`.
+- [x] Buat migrasi `kunjungan`.
+- [x] Buat migrasi `faq`.
+- [x] Buat migrasi `rating`.
+- [x] Buat enum PHP:
   - `Role`
   - `StatusKunjungan`
   - `KlasifikasiStatus`
   - `KategoriTamu`
   - `Hari`
-- [ ] Buat model Eloquent + relasi + cast enum.
-- [ ] Buat factory untuk unit, pegawai, tamu, kunjungan, FAQ, rating.
-- [ ] Buat seeder:
+- [x] Buat model Eloquent + relasi + cast enum.
+- [x] Buat factory untuk unit, pegawai, tamu, kunjungan, FAQ, rating.
+- [x] Buat seeder:
   - unit contoh,
   - jam layanan,
   - user per peran,
   - pegawai,
   - FAQ,
   - contoh kunjungan.
-- [ ] Buat utility normalisasi nomor HP (`08xx`, `+62xx`, `62xx` → `62xx`).
-- [ ] Tambahkan unique index dan index pencarian yang diperlukan.
+- [x] Buat utility normalisasi nomor HP (`08xx`, `+62xx`, `62xx` → `62xx`).
+- [x] Tambahkan unique index dan index pencarian yang diperlukan.
 
 **Aturan skema penting:**
 
