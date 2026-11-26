@@ -11,6 +11,16 @@ class StoreKunjunganRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'keperluan' => strip_tags(trim((string) $this->input('keperluan'))),
+            'nama' => strip_tags(trim((string) $this->input('nama'))),
+            'instansi' => strip_tags(trim((string) $this->input('instansi'))),
+            'alamat' => strip_tags(trim((string) $this->input('alamat'))),
+        ]);
+    }
+
     public function rules(): array
     {
         return [

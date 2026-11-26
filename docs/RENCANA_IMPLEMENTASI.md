@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, Fase 5, Fase 6, Fase 7, dan Fase 8 selesai dieksekusi (rekap)  
+> **Status:** Fase 0–9 selesai dieksekusi (MVP siap deploy)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -457,19 +457,19 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Rate limit form, rating, dan FAQ.
-- [ ] Validasi input dan sanitasi teks keperluan sebelum masuk prompt AI.
-- [ ] Log tanpa data pribadi berlebihan.
-- [ ] Failed job dan retry/backoff.
-- [ ] Queue worker berjalan.
-- [ ] Test suite lengkap.
-- [ ] `npm run build`.
-- [ ] `php artisan migrate --force`.
-- [ ] `config:cache`, `route:cache`.
-- [ ] Supervisor untuk queue worker.
-- [ ] HTTPS dan secure cookie.
-- [ ] Backup Neon.
-- [ ] Manual QA kiosk dan dashboard.
+- [x] Rate limit form, rating, dan FAQ.
+- [x] Validasi input dan sanitasi teks keperluan sebelum masuk prompt AI.
+- [x] Log tanpa data pribadi berlebihan.
+- [x] Failed job dan retry/backoff.
+- [x] Queue worker berjalan.
+- [x] Test suite lengkap.
+- [x] `npm run build`.
+- [x] `php artisan migrate --force`.
+- [x] `config:cache`, `route:cache`.
+- [x] Supervisor untuk queue worker.
+- [x] HTTPS dan secure cookie.
+- [x] Backup Neon.
+- [x] Manual QA kiosk dan dashboard.
 
 **Deliverable:**
 
@@ -550,16 +550,16 @@ Pekerjaan:
 
 ## 8. Definition of Done MVP
 
-- [ ] Tamu bisa scan QR/kiosk, isi form, dan mendapat arahan ruang tamu unit.
-- [ ] AI menentukan unit; sistem memilih satu pegawai dan mengirim notifikasi.
-- [ ] Pegawai/resepsionis bisa mengubah status sampai `selesai` atau `tidak_terlayani`.
-- [ ] Rating hanya bisa diberikan sekali untuk kunjungan `selesai`.
-- [ ] Resepsionis/admin bisa mengelola master data.
-- [ ] Pimpinan bisa melihat rekap dan ringkasan mingguan.
-- [ ] Semua test lulus.
-- [ ] `npm run build` lulus.
-- [ ] Tidak ada kredensial di repository.
-- [ ] Queue worker dan failed job termonitor.
+- [x] Tamu bisa scan QR/kiosk, isi form, dan mendapat arahan ruang tamu unit.
+- [x] AI menentukan unit; sistem memilih satu pegawai dan mengirim notifikasi.
+- [x] Pegawai/resepsionis bisa mengubah status sampai `selesai` atau `tidak_terlayani`.
+- [x] Rating hanya bisa diberikan sekali untuk kunjungan `selesai`.
+- [x] Resepsionis/admin bisa mengelola master data.
+- [x] Pimpinan bisa melihat rekap dan ringkasan mingguan.
+- [x] Semua test lulus.
+- [x] `npm run build` lulus.
+- [x] Tidak ada kredensial di repository.
+- [x] Queue worker dan failed job termonitor.
 
 ---
 
