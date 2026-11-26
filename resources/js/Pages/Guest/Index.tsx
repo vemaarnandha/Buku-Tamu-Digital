@@ -2,11 +2,11 @@ import { Head, Link, router, useForm } from '@inertiajs/react';
 import { FormEventHandler, useEffect } from 'react';
 
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 type Tamu = {
     id: number;
@@ -88,7 +88,7 @@ export default function Form({
                     </CardHeader>
                     <CardContent>
                         {diLuarJamLayanan && (
-                            <div className="mb-4 rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+                            <div className="mb-4 rounded-lg border border-amber-400/40 bg-amber-500/10 p-3 text-sm text-amber-200">
                                 Perhatian: saat ini di luar jam layanan
                                 {jamLayananHariIni.length > 0
                                     ? ` (${jamLayananHariIni.join(', ')})`
@@ -104,7 +104,7 @@ export default function Form({
                         )}
 
                         {tamu && (
-                            <div className="mb-4 rounded-md border border-green-300 bg-green-50 p-3 text-sm text-green-800">
+                            <div className="mb-4 rounded-lg border border-emerald-400/40 bg-emerald-500/10 p-3 text-sm text-emerald-200">
                                 Selamat datang kembali, {tamu.nama}! Kunjungan
                                 selesai ke-{kunjunganSelesai}. Identitas terisi
                                 otomatis.
@@ -112,15 +112,14 @@ export default function Form({
                         )}
 
                         <form onSubmit={submit} className="space-y-4">
-                            <div>
-                                <InputLabel htmlFor="no_hp" value="Nomor HP" />
+                            <div className="space-y-2">
+                                <Label htmlFor="no_hp">Nomor HP</Label>
 
-                                <div className="mt-1 flex gap-2">
-                                    <TextInput
+                                <div className="flex gap-2">
+                                    <Input
                                         id="no_hp"
                                         name="no_hp"
                                         value={data.no_hp}
-                                        className="block w-full"
                                         autoComplete="tel"
                                         onChange={(e) =>
                                             setData('no_hp', e.target.value)
@@ -141,14 +140,13 @@ export default function Form({
                                 />
                             </div>
 
-                            <div>
-                                <InputLabel htmlFor="nama" value="Nama" />
+                            <div className="space-y-2">
+                                <Label htmlFor="nama">Nama</Label>
 
-                                <TextInput
+                                <Input
                                     id="nama"
                                     name="nama"
                                     value={data.nama}
-                                    className="mt-1 block w-full"
                                     onChange={(e) =>
                                         setData('nama', e.target.value)
                                     }
@@ -160,13 +158,10 @@ export default function Form({
                                 />
                             </div>
 
-                            <div>
-                                <InputLabel
-                                    htmlFor="kategori"
-                                    value="Kategori"
-                                />
+                            <div className="space-y-2">
+                                <Label>Kategori</Label>
 
-                                <div className="mt-1 flex gap-4">
+                                <div className="flex gap-4">
                                     <label className="flex items-center gap-2 text-sm">
                                         <input
                                             type="radio"
@@ -199,17 +194,13 @@ export default function Form({
                                 />
                             </div>
 
-                            <div>
-                                <InputLabel
-                                    htmlFor="instansi"
-                                    value="Instansi"
-                                />
+                            <div className="space-y-2">
+                                <Label htmlFor="instansi">Instansi</Label>
 
-                                <TextInput
+                                <Input
                                     id="instansi"
                                     name="instansi"
                                     value={data.instansi}
-                                    className="mt-1 block w-full"
                                     onChange={(e) =>
                                         setData('instansi', e.target.value)
                                     }
@@ -221,14 +212,13 @@ export default function Form({
                                 />
                             </div>
 
-                            <div>
-                                <InputLabel htmlFor="alamat" value="Alamat" />
+                            <div className="space-y-2">
+                                <Label htmlFor="alamat">Alamat</Label>
 
-                                <TextInput
+                                <Input
                                     id="alamat"
                                     name="alamat"
                                     value={data.alamat}
-                                    className="mt-1 block w-full"
                                     onChange={(e) =>
                                         setData('alamat', e.target.value)
                                     }
@@ -240,17 +230,13 @@ export default function Form({
                                 />
                             </div>
 
-                            <div>
-                                <InputLabel
-                                    htmlFor="keperluan"
-                                    value="Keperluan"
-                                />
+                            <div className="space-y-2">
+                                <Label htmlFor="keperluan">Keperluan</Label>
 
-                                <textarea
+                                <Textarea
                                     id="keperluan"
                                     name="keperluan"
                                     value={data.keperluan}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     rows={4}
                                     placeholder="Tulis keperluan Anda dengan kalimat biasa..."
                                     onChange={(e) =>
@@ -265,9 +251,9 @@ export default function Form({
                             </div>
 
                             <div className="flex items-center justify-end">
-                                <PrimaryButton disabled={processing}>
+                                <Button type="submit" disabled={processing}>
                                     Kirim
-                                </PrimaryButton>
+                                </Button>
                             </div>
                         </form>
                     </CardContent>
