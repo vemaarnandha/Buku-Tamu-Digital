@@ -1,19 +1,20 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Guest\KunjunganController as GuestKunjunganController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [GuestKunjunganController::class, 'create'])->name('home');
+Route::get('/kunjungan/create', [GuestKunjunganController::class, 'create'])
+    ->middleware('throttle:20,1')
+    ->name('kunjungan.create');
+Route::post('/kunjungan', [GuestKunjunganController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('kunjungan.store');
+Route::get('/kunjungan/{kode_publik}/status', [GuestKunjunganController::class, 'status'])
+    ->name('kunjungan.status');
 
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
