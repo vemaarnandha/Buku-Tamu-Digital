@@ -146,3 +146,35 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
 </laravel-boost-guidelines>
+
+## Workflow Fase Implementasi (Project-Specific)
+
+Saat diminta mengerjakan fase berikutnya dari `docs/RENCANA_IMPLEMENTASI.md`:
+
+1. **Baca acuan dulu**
+   - Baca `docs/RENCANA_IMPLEMENTASI.md` (target fase, pekerjaan, deliverable, validasi).
+   - Baca `docs/Desain Sistem Buku Tamu Digital.md` untuk ERD, aturan bisnis, matriks akses.
+   - Baca `docs/fase_<n-1>_implementasi.md` (jika ada) untuk pola dan catatan.
+
+2. **Kerjakan sesuai vertical slice**
+   - Ikuti urutan pekerjaan fase; jangan lompat fase tanpa alasan.
+   - Semua halaman memakai Inertia; AI/notifikasi lewat queue; test integrasi memakai PostgreSQL (bukan SQLite).
+
+3. **Dokumentasikan**
+   - Tulis `docs/fase_<n>_implementasi.md` dengan format seperti `docs/fase_1_implementasi.md` / `fase_2_implementasi.md`:
+     - Tujuan, Perubahan yang Dilakukan, Validasi yang Dijalankan, Catatan.
+   - Update checkbox/status di `docs/RENCANA_IMPLEMENTASI.md` untuk fase yang selesai.
+   - Update `README.md` jika ada perubahan struktur/perintah yang relevan.
+
+4. **Validasi sebelum commit**
+   - `php artisan test` (atau subset yang relevan) lulus.
+   - `npm run build` lulus jika ada perubahan frontend.
+   - `vendor/bin/pint --dirty --format agent` untuk file PHP.
+
+5. **Commit atomik**
+   - Gunakan conventional commit (`feat:`, `chore:`, `docs:`, `test:`).
+   - Pisahkan commit untuk concern berbeda (DB, auth, docs, tooling).
+   - Jangan commit `.env`, `node_modules`, `vendor`, `public/build`.
+
+6. **Laporkan**
+   - Sebutkan hash commit, pesan, dan file yang tersisa uncommitted (jika ada).
