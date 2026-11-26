@@ -3,8 +3,10 @@
 use App\Http\Controllers\Dashboard\KunjunganController as DashboardKunjunganController;
 use App\Http\Controllers\Dashboard\TugasController as DashboardTugasController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Guest\KunjunganController as GuestKunjunganController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RatingController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -17,6 +19,10 @@ Route::post('/kunjungan', [GuestKunjunganController::class, 'store'])
     ->name('kunjungan.store');
 Route::get('/kunjungan/{kode_publik}/status', [GuestKunjunganController::class, 'status'])
     ->name('kunjungan.status');
+
+Route::get('/rating', [RatingController::class, 'index'])->middleware('throttle:20,1')->name('rating.index');
+Route::post('/rating', [RatingController::class, 'store'])->middleware('throttle:10,1')->name('rating.store');
+Route::post('/faq/tanya', [FaqController::class, 'ask'])->middleware('throttle:20,1')->name('faq.tanya');
 
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])

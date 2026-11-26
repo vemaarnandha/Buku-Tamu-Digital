@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, dan Fase 5 selesai dieksekusi (dashboard staf)  
+> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, Fase 5, dan Fase 6 selesai dieksekusi (rating dan FAQ)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -351,19 +351,19 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Halaman `GET /rating`.
-- [ ] `POST /rating` untuk menyimpan rating.
-- [ ] Cari kunjungan `selesai` hari itu berdasarkan `no_hp`.
-- [ ] Ambil kunjungan terbaru yang belum punya rating.
-- [ ] Simpan nilai 1–5 dan komentar opsional.
-- [ ] Unique constraint mencegah rating ganda.
-- [ ] Tampilkan pesan jika tidak ada kunjungan selesai.
-- [ ] Halaman/komponen asisten FAQ.
-- [ ] `POST /faq/tanya`.
-- [ ] Pilih maksimal 8 FAQ aktif (global + unit) berdasarkan skor kata kunci.
-- [ ] Kirim ke AI dengan instruksi hanya menjawab dari FAQ.
-- [ ] Kembalikan jawaban + ID FAQ sumber.
-- [ ] Rate limit endpoint FAQ dan rating.
+- [x] Halaman `GET /rating`.
+- [x] `POST /rating` untuk menyimpan rating.
+- [x] Cari kunjungan `selesai` hari itu berdasarkan `no_hp`.
+- [x] Ambil kunjungan terbaru yang belum punya rating.
+- [x] Simpan nilai 1–5 dan komentar opsional.
+- [x] Unique constraint mencegah rating ganda.
+- [x] Tampilkan pesan jika tidak ada kunjungan selesai.
+- [x] Halaman/komponen asisten FAQ.
+- [x] `POST /faq/tanya`.
+- [x] Pilih maksimal 8 FAQ aktif (global + unit) berdasarkan skor kata kunci.
+- [x] Kirim ke AI dengan instruksi hanya menjawab dari FAQ.
+- [x] Kembalikan jawaban + ID FAQ sumber.
+- [x] Rate limit endpoint FAQ dan rating.
 
 **Deliverable:**
 
