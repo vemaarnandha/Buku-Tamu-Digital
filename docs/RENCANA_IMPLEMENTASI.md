@@ -1,6 +1,6 @@
 # Rencana Implementasi Buku Tamu Digital
 
-> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, dan Fase 4 selesai dieksekusi (alur tamu publik, AI, penugasan, notifikasi)  
+> **Status:** Fase 0, Fase 1, Fase 2, Fase 3, Fase 4, dan Fase 5 selesai dieksekusi (dashboard staf)  
 > **Tanggal:** 26 November 2026  
 > **Acuan utama:** [README](../README.md) dan [Desain Sistem Buku Tamu Digital](./Desain%20Sistem%20Buku%20Tamu%20Digital.md)  
 > **Catatan:** gambar `rancangan_app` lama tidak dipakai sebagai acuan sampai diperbarui. Dokumen repo saat ini yang menjadi source of truth.
@@ -308,27 +308,27 @@ Pekerjaan:
 
 Pekerjaan:
 
-- [ ] Layout dashboard dengan navigasi sesuai peran.
-- [ ] Dashboard resepsionis/admin:
+- [x] Layout dashboard dengan navigasi sesuai peran.
+- [x] Dashboard resepsionis/admin:
   - kartu statistik: menunggu, dilayani, selesai, tidak terlayani,
   - filter: perlu ditinjau, belum ada pegawai, menunggu > 15 menit,
   - daftar kunjungan.
-- [ ] Halaman detail kunjungan.
-- [ ] Koreksi klasifikasi:
+- [x] Halaman detail kunjungan.
+- [x] Koreksi klasifikasi:
   - ubah unit/kategori/ringkasan,
   - set `klasifikasi_status = manual`,
   - isi `diubah_oleh`.
-- [ ] Jika unit diubah, kosongkan `pegawai_id` dan tugaskan ulang.
-- [ ] Ganti pegawai + kirim notifikasi ulang.
-- [ ] Ubah status sesuai aturan §4.1:
+- [x] Jika unit diubah, kosongkan `pegawai_id` dan tugaskan ulang.
+- [x] Ganti pegawai + kirim notifikasi ulang.
+- [x] Ubah status sesuai aturan §4.1:
   - `menunggu` → `dilayani` (wajib ada pegawai),
   - `dilayani` → `selesai`,
   - `menunggu`/`dilayani` → `tidak_terlayani` (alasan wajib).
-- [ ] Isi `waktu_dilayani` dan `waktu_selesai` otomatis.
-- [ ] Dashboard pegawai: hanya tugas sendiri.
-- [ ] Tombol “Tandai dilayani” dan “Tandai selesai”.
-- [ ] Admin correction dengan `catatan` wajib.
-- [ ] Tampilkan status notifikasi dan alasan gagal.
+- [x] Isi `waktu_dilayani` dan `waktu_selesai` otomatis.
+- [x] Dashboard pegawai: hanya tugas sendiri.
+- [x] Tombol “Tandai dilayani” dan “Tandai selesai”.
+- [x] Admin correction dengan `catatan` wajib.
+- [x] Tampilkan status notifikasi dan alasan gagal.
 
 **Deliverable:**
 
